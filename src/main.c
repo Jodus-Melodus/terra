@@ -24,6 +24,12 @@ int main()
 
     while (!WindowShouldClose())
     {
+        int i = LoadLayerTextureFromFile(screen->layers[BackgroundLayer], "../../textures/test.png");
+        if (i)
+        {
+            printf("Error loading texture\n");
+        }
+
         UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
         BeginDrawing();
         ClearBackground(BLACK);
@@ -31,8 +37,8 @@ int main()
         EndDrawing();
     }
 
-    UnloadTexture(texture);
     FreeScreenBuffer(screen);
+    UnloadTexture(texture);
     CloseWindow();
     return 0;
 }

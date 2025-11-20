@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "types.h"
 #include "raylib.h"
+#include "stb_image.h"
 
 typedef struct
 {
@@ -12,6 +13,7 @@ typedef struct
 } Layer;
 
 Layer *CreateLayer(const unsigned int width, const unsigned int height);
+int LoadLayerTextureFromFile(Layer *layer, const char *texturePath);
 void FreeLayer(Layer *layer);
 
 #endif
