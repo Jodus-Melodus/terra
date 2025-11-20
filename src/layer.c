@@ -18,7 +18,7 @@ Layer *CreateLayer(const unsigned int width, const unsigned int height)
     return layer;
 }
 
-int LoadLayerTextureFromFile(Layer *layer, const char *texturePath)
+int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned int y, const char *texturePath)
 {
     int width, height, channels;
     unsigned char *textureData = stbi_load(texturePath, &width, &height, &channels, 0);
@@ -35,18 +35,18 @@ int LoadLayerTextureFromFile(Layer *layer, const char *texturePath)
         return 1;
     }
 
-    for (int y = 0; y < height; y++)
+    for (int dy = 0; dy < height; dy++)
     {
-        for (int x = 0; x < width; x++)
+        for (int dx = 0; dx < width; dx++)
         {
-            int index = (y * width + x) * channels;
+            int index = (dy * width + dx) * channels;
             unsigned char r = textureData[index];
             unsigned char g = (channels > 1) ? textureData[index + 1] : 0;
             unsigned char b = (channels > 2) ? textureData[index + 2] : 0;
             unsigned char a = (channels > 3) ? textureData[index + 3] : 255;
 
             Color color = {r, g, b, a};
-            layer->buffer[y * layer->width + x] = color;
+            layer->buffer[(dy + y) * layer->width + (dx + x)] = color;
         }
     }
 

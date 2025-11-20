@@ -13,7 +13,7 @@ typedef struct
 } Layer;
 
 Layer *CreateLayer(const unsigned int width, const unsigned int height);
-int LoadLayerTextureFromFile(Layer *layer, const char *texturePath);
+int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned int y, const char *texturePath);
 void FreeLayer(Layer *layer);
 
 #endif
