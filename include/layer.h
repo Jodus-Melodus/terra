@@ -11,4 +11,6 @@ typedef struct
     Color *buffer;
 } Layer;
 
+Layer *CreateLayer(const unsigned char width, const unsigned char height);
+
 #endif
