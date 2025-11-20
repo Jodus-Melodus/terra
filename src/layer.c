@@ -15,3 +15,11 @@ Layer *CreateLayer(const unsigned char width, const unsigned char height)
     layer->width = width;
     return layer;
 }
+
+void FreeLayer(Layer *layer)
+{
+    if (!layer)
+        return NULL;
+    free(layer->buffer);
+    free(layer);
+}

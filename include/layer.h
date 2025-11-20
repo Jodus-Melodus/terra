@@ -12,5 +12,6 @@ typedef struct
 } Layer;
 
 Layer *CreateLayer(const unsigned char width, const unsigned char height);
+void FreeLayer(Layer *layer);
 
 #endif
