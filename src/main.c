@@ -14,7 +14,7 @@ int main()
     ScreenBuffer *screen = CreateScreenBuffer(width, height);
 
     Image image = {
-        .data = screen->layers[0]->buffer,
+        .data = screen->layers[BackgroundLayer]->buffer,
         .width = width,
         .height = height,
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
@@ -24,7 +24,7 @@ int main()
 
     while (!WindowShouldClose())
     {
-        UpdateTexture(texture, screen->layers[0]->buffer);
+        UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
         BeginDrawing();
         ClearBackground(BLACK);
         DrawTexture(texture, 0, 0, WHITE);

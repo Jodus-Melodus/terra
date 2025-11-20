@@ -6,26 +6,28 @@ ScreenBuffer *CreateScreenBuffer(const unsigned int width, const unsigned int he
     if (!screen)
         return NULL;
 
-    Layer *layer = CreateLayer(width, height);
-    if (!layer)
-    {
-        free(screen);
-        return NULL;
-    }
-
-    screen->layerCount = 1;
-    screen->width = width;
-    screen->height = height;
-
-    screen->layers = malloc(sizeof(Layer *));
+    screen->layers = malloc(3 * sizeof(Layer *));
     if (!screen->layers)
     {
-        FreeLayer(layer);
         free(screen);
         return NULL;
     }
 
-    screen->layers[0] = layer;
+    for (size_t i = 0; i < 3; i++)
+    {
+        Layer *layer = CreateLayer(width, height);
+        if (!layer)
+        {
+            free(screen->layers);
+            free(screen);
+            return NULL;
+        }
+        screen->layers[i] = layer;
+    }
+
+    screen->layerCount = 3;
+    screen->width = width;
+    screen->height = height;
     return screen;
 }
 
