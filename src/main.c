@@ -24,21 +24,32 @@ int main()
 
     Texture2D texture = LoadTextureFromImage(image);
 
+    float deltaTime = 0;
+
     while (!WindowShouldClose())
     {
+        deltaTime = GetFrameTime();
+
         if (IsKeyDown(KEY_A))
-            player->x -= 1;
-        if (IsKeyDown(KEY_D))
-            player->x += 1;
+            player->xVelocity = -100;
+        else if (IsKeyDown(KEY_D))
+            player->xVelocity = 100;
+        else
+            player->xVelocity = 0;
+
         if (IsKeyDown(KEY_W))
-            player->y -= 1;
-        if (IsKeyDown(KEY_S))
-            player->y += 1;
+            player->yVelocity = -100;
+        else if (IsKeyDown(KEY_S))
+            player->yVelocity = 100;
+        else
+            player->yVelocity = 0;
 
         FillLayer(screen->layers[BackgroundLayer], BLACK);
         DrawLayerEntity(screen->layers[BackgroundLayer], player);
 
-        printf("Player coords: (%u, %u)\n", player->x, player->y);
+        printf("Player coords: (%.2f, %.2f)\n", player->x, player->y);
+
+        UpdateEntity(player, deltaTime);
 
         UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
         BeginDrawing();

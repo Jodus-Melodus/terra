@@ -1,6 +1,6 @@
 #include "entity.h"
 
-Entity *CreateEntity(const char *name, unsigned int x, unsigned int y, const char *texture)
+Entity *CreateEntity(const char *name, float x, float y, const char *texture)
 {
     Entity *entity = malloc(sizeof(Entity));
     if (!entity)
@@ -22,31 +22,16 @@ Entity *CreateEntity(const char *name, unsigned int x, unsigned int y, const cha
     }
 
     entity->name = name;
+    entity->texture = texture;
     entity->x = x;
     entity->y = y;
-    entity->texture = texture;
+    entity->xVelocity = 0;
+    entity->yVelocity = 0;
     return entity;
 }
 
-int MoveEntity(Entity *entity, int x, int y)
+void UpdateEntity(Entity *entity, float deltaTime)
 {
-    if (!entity)
-    {
-        printf("MoveEntity: Invalid entity pointer\n");
-        return 1;
-    }
-
-    entity->x += x;
-    entity->y += y;
-    return 0;
-}
-
-void FreeEntity(Entity *entity)
-{
-    if (!entity)
-        return;
-    if (entity->name)
-        free(entity->name);
-    if (entity->texture)
-        free(entity->texture);
+    entity->x += entity->xVelocity * deltaTime;
+    entity->y += entity->yVelocity * deltaTime;
 }

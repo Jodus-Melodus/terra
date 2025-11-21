@@ -7,12 +7,11 @@
 typedef struct
 {
     const char *name;
-    unsigned int x, y;
     const char *texture;
+    float x, y, xVelocity, yVelocity;
 } Entity;
 
-Entity *CreateEntity(const char *name, unsigned int x, unsigned int y, const char *texture);
-int MoveEntity(Entity *entity, int x, int y);
-void FreeEntity(Entity *entity);
+Entity *CreateEntity(const char *name, float x, float y, const char *texture);
+void UpdateEntity(Entity *entity, float deltaTime);
 
 #endif
