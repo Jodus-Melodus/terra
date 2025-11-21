@@ -15,7 +15,7 @@ int main()
     ScreenBuffer *screen = CreateScreenBuffer(width, height);
     Entity *player = CreateEntity("Player", 50, 50, "../../textures/test.png", 50, 50);
     Image image = {
-        .data = screen->layers[BackgroundLayer]->buffer,
+        .data = screen->layers[MidgroundLayer]->buffer,
         .width = width,
         .height = height,
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
@@ -48,12 +48,13 @@ int main()
                 player->yVelocity = 0;
         }
 
-        FillLayer(screen->layers[BackgroundLayer], BLACK);
-        DrawLayerEntity(screen->layers[BackgroundLayer], player);
+        printf("Player: %d %d\n", player->x, player->y);
 
+        FillLayer(screen->layers[MidgroundLayer], BLACK);
         UpdateEntity(player, deltaTime);
+        DrawLayerEntity(screen->layers[MidgroundLayer], player);
 
-        UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
+        UpdateTexture(texture, screen->layers[MidgroundLayer]->buffer);
         BeginDrawing();
         ClearBackground(BLACK);
         DrawTexture(texture, 0, 0, WHITE);

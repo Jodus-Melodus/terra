@@ -1,6 +1,6 @@
 #include "entity.h"
 
-Entity *CreateEntity(const char *name, float x, float y, const char *texture, int width, int height)
+Entity *CreateEntity(const char *name, int x, int y, const char *texture, int width, int height)
 {
     Entity *entity = malloc(sizeof(Entity));
     if (!entity)
@@ -45,6 +45,6 @@ int EntityOnGround(Entity *entity)
 
 void UpdateEntity(Entity *entity, float deltaTime)
 {
-    entity->x += entity->xVelocity * deltaTime;
-    entity->y += entity->yVelocity * deltaTime;
+    entity->x += round(entity->xVelocity * deltaTime);
+    entity->y += round(entity->yVelocity * deltaTime);
 }
