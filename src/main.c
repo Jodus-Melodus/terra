@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 #include "screen.h"
+#include "entity.h"
 
 int main()
 {
@@ -12,6 +13,7 @@ int main()
     SetTargetFPS(60);
 
     ScreenBuffer *screen = CreateScreenBuffer(width, height);
+    Entity *player = CreateEntity("Player", 0, 0, "../../textures/test.png");
 
     Image image = {
         .data = screen->layers[BackgroundLayer]->buffer,
@@ -22,22 +24,19 @@ int main()
 
     Texture2D texture = LoadTextureFromImage(image);
 
-    unsigned int x = 0;
-    unsigned int y = 0;
-
     while (!WindowShouldClose())
     {
         if (IsKeyDown(KEY_A))
-            x -= 1;
+            player->x -= 1;
         if (IsKeyDown(KEY_D))
-            x += 1;
+            player->x += 1;
         if (IsKeyDown(KEY_W))
-            y -= 1;
+            player->y -= 1;
         if (IsKeyDown(KEY_S))
-            y += 1;
+            player->y += 1;
 
         FillLayer(screen->layers[BackgroundLayer], BLACK);
-        LoadLayerTextureFromFile(screen->layers[BackgroundLayer], x, y, "../../textures/test.png");
+        DrawLayerEntity(screen->layers[BackgroundLayer], player);
 
         UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
         BeginDrawing();

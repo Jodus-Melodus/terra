@@ -58,6 +58,23 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
     return 0;
 }
 
+int DrawLayerEntity(Layer *layer, Entity *entity)
+{
+    if (!layer)
+    {
+        printf("DrawLayerEntity: Invalid layer pointer\n");
+        return 1;
+    }
+
+    if (!entity)
+    {
+        printf("DrawLayerEntity: Invalid entity pointer\n");
+        return 1;
+    }
+
+    return LoadLayerTextureFromFile(layer, entity->x, entity->y, entity->texture);
+}
+
 int FillLayer(Layer *layer, Color color)
 {
     if (!layer)
