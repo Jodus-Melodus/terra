@@ -13,7 +13,7 @@ int main()
     SetTargetFPS(60);
 
     ScreenBuffer *screen = CreateScreenBuffer(width, height);
-    Entity *player = CreateEntity("Player", 0, 0, "../../textures/test.png");
+    Entity *player = CreateEntity("Player", 25, 25, "../../textures/test.png");
 
     Image image = {
         .data = screen->layers[BackgroundLayer]->buffer,
@@ -37,6 +37,8 @@ int main()
 
         FillLayer(screen->layers[BackgroundLayer], BLACK);
         DrawLayerEntity(screen->layers[BackgroundLayer], player);
+
+        printf("Player coords: (%u, %u)\n", player->x, player->y);
 
         UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
         BeginDrawing();
