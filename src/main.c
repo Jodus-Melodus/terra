@@ -7,21 +7,30 @@
 int main()
 {
     const unsigned int width = 1700;
-    const unsigned int height = 960;
+    const unsigned int height = 950;
 
     InitWindow(width, height, "Terra");
     SetTargetFPS(60);
 
     ScreenBuffer *screen = CreateScreenBuffer(width, height);
     Entity *player = CreateEntity("Player", 50, 50, "../../textures/test.png", 50, 50);
-    Image image = {
+    Image backgroundImage = {
+        .data = screen->layers[BackgroundLayer]->buffer,
+        .width = width,
+        .height = height,
+        .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
+        .mipmaps = 1};
+
+    Texture2D textureBackground = LoadTextureFromImage(backgroundImage);
+
+    Image midgroundImage = {
         .data = screen->layers[MidgroundLayer]->buffer,
         .width = width,
         .height = height,
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
         .mipmaps = 1};
 
-    Texture2D texture = LoadTextureFromImage(image);
+    Texture2D textureMidground = LoadTextureFromImage(midgroundImage);
 
     float deltaTime = 0;
 
@@ -48,21 +57,25 @@ int main()
                 player->yVelocity = 0;
         }
 
-        printf("Player: %d %d\n", player->x, player->y);
+        LoadLayerTextureFromFile(screen->layers[BackgroundLayer], 850, 475, "../../textures/background.png");
 
-        FillLayer(screen->layers[MidgroundLayer], BLACK);
+        Color c = {0, 0, 0, 0};
+        FillLayer(screen->layers[MidgroundLayer], c);
         UpdateEntity(player, deltaTime);
         DrawLayerEntity(screen->layers[MidgroundLayer], player);
 
-        UpdateTexture(texture, screen->layers[MidgroundLayer]->buffer);
+        UpdateTexture(textureBackground, screen->layers[BackgroundLayer]->buffer);
+        UpdateTexture(textureMidground, screen->layers[MidgroundLayer]->buffer);
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawTexture(texture, 0, 0, WHITE);
+        DrawTexture(textureBackground, 0, 0, WHITE);
+        DrawTexture(textureMidground, 0, 0, WHITE);
         EndDrawing();
     }
 
     FreeScreenBuffer(screen);
-    UnloadTexture(texture);
+    UnloadTexture(textureBackground);
+    UnloadTexture(textureMidground);
     CloseWindow();
     return 0;
 }
