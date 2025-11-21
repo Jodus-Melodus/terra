@@ -21,15 +21,13 @@ Entity *CreateEntity(const char *name, int x, int y, const char *texture, int wi
         return NULL;
     }
 
-    Vector2 velocity = {.x = 0, .y = 0};
-
     entity->name = name;
     entity->texture = texture;
     entity->width = width;
     entity->height = height;
     entity->x = x;
     entity->y = y;
-    entity->velocity = velocity;
+    entity->velocity = (Vector2){0, 0};
     return entity;
 }
 

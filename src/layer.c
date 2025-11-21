@@ -49,8 +49,7 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
             unsigned char b = (channels > 2) ? textureData[index + 2] : 0;
             unsigned char a = (channels > 3) ? textureData[index + 3] : 255;
 
-            Color color = {r, g, b, a};
-            layer->buffer[(dy + y) * layer->width + (dx + x)] = color;
+            layer->buffer[(dy + y) * layer->width + (dx + x)] = (Color){r, g, b, a};
         }
     }
 
