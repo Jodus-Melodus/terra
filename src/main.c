@@ -38,7 +38,6 @@ int main()
 
         FillLayer(screen->layers[BackgroundLayer], BLACK);
         LoadLayerTextureFromFile(screen->layers[BackgroundLayer], x, y, "../../textures/test.png");
-        // LoadLayerTextureFromFile(screen->layers[BackgroundLayer], x + 50, y + 50, "../../textures/test.png");
 
         UpdateTexture(texture, screen->layers[BackgroundLayer]->buffer);
         BeginDrawing();

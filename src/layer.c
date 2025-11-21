@@ -4,12 +4,16 @@ Layer *CreateLayer(const unsigned int width, const unsigned int height)
 {
     Layer *layer = malloc(sizeof(Layer));
     if (!layer)
+    {
+        printf("CreateLayer: Failed to allocate memory for layer\n");
         return NULL;
+    }
 
     layer->buffer = calloc(width * height, sizeof(Color));
     if (!layer->buffer)
     {
         free(layer);
+        printf("CreateLayer: Failed to allocate memory for layer buffer\n");
         return NULL;
     }
 
@@ -24,13 +28,13 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
     unsigned char *textureData = stbi_load(texturePath, &width, &height, &channels, 0);
     if (!textureData)
     {
-        printf("Failed to read texture\n");
+        printf("LoadLayerTextureFromFile: Failed to read texture\n");
         return 1;
     }
 
     if (height > layer->height || width > layer->width)
     {
-        printf("Texture image too large\n");
+        printf("LoadLayerTextureFromFile: Texture image too large\n");
         stbi_image_free(textureData);
         return 1;
     }
@@ -58,13 +62,13 @@ int FillLayer(Layer *layer, Color color)
 {
     if (!layer)
     {
-        printf("FillLayer: Invalid layer pointer");
+        printf("FillLayer: Invalid layer pointer\n");
         return 1;
     }
 
     if (!layer->buffer)
     {
-        printf("FillLayer: Invalid layer buffer pointer");
+        printf("FillLayer: Invalid layer buffer pointer\n");
         return 1;
     }
 
