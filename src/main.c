@@ -36,6 +36,7 @@ int main()
         if (IsKeyDown(KEY_S))
             y += 1;
 
+        FillLayer(screen->layers[BackgroundLayer], BLACK);
         LoadLayerTextureFromFile(screen->layers[BackgroundLayer], x, y, "../../textures/test.png");
         // LoadLayerTextureFromFile(screen->layers[BackgroundLayer], x + 50, y + 50, "../../textures/test.png");
 

@@ -54,6 +54,27 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
     return 0;
 }
 
+int FillLayer(Layer *layer, Color color)
+{
+    if (!layer)
+    {
+        printf("FillLayer: Invalid layer pointer");
+        return 1;
+    }
+
+    if (!layer->buffer)
+    {
+        printf("FillLayer: Invalid layer buffer pointer");
+        return 1;
+    }
+
+    for (size_t y = 0; y < layer->height; y++)
+        for (size_t x = 0; x < layer->width; x++)
+            layer->buffer[y * layer->width + x] = color;
+
+    return 0;
+}
+
 void FreeLayer(Layer *layer)
 {
     if (!layer)

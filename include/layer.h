@@ -14,6 +14,7 @@ typedef struct
 
 Layer *CreateLayer(const unsigned int width, const unsigned int height);
 int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned int y, const char *texturePath);
+int FillLayer(Layer *layer, Color color);
 void FreeLayer(Layer *layer);
 
 #endif
