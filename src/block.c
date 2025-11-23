@@ -1,16 +1,10 @@
 #include "block.h"
 
-BlockRegistry *CreateBlockRegistry()
+BlockRegistry CreateBlockRegistry()
 {
-    BlockRegistry *blockRegistry = malloc(sizeof(BlockRegistry));
-    if (!blockRegistry)
-    {
-        printf("CreateBlockRegistry: Failed to allocate memory for block registry\n");
-        return NULL;
-    }
-
-    blockRegistry->blockCount = 0;
-    return blockRegistry;
+    return (BlockRegistry){
+        .blockCount = 0,
+        .registry = {0}};
 }
 
 int RegisterBlock(BlockRegistry *blockRegistry, BlockDefinition blockDefinition)
@@ -33,22 +27,9 @@ int InitializeBlockRegistry(BlockRegistry *blockRegistry)
         return 1;
     }
 
-    RegisterBlock(blockRegistry, (BlockDefinition){
-                                     .name = "Air",
-                                     .isSolid = 0,
-                                     .textureIndex = (Vector2){2, 0}});
-
-    RegisterBlock(blockRegistry, (BlockDefinition){
-                                     .name = "Grass",
-                                     .isSolid = 1,
-                                     .textureIndex = (Vector2){0,0}});
-
-    RegisterBlock(blockRegistry, (BlockDefinition){
-                                     .name = "Dirt",
-                                     .isSolid = 1,
-                                     .textureIndex = (Vector2){1,0}});
-
-    
+    RegisterBlock(blockRegistry, (BlockDefinition){.name = "Air", .isSolid = 0, .textureIndex = (Vector2){2, 0}, .onBreak = NULL, .onPlace = NULL});
+    RegisterBlock(blockRegistry, (BlockDefinition){.name = "Grass", .isSolid = 1, .textureIndex = (Vector2){0, 0}, .onBreak = NULL, .onPlace = NULL});
+    RegisterBlock(blockRegistry, (BlockDefinition){.name = "Dirt", .isSolid = 1, .textureIndex = (Vector2){1, 0}, .onBreak = NULL, .onPlace = NULL});
 
     return 0;
 }

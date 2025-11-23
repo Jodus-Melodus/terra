@@ -1,25 +1,8 @@
 #include "layer.h"
 
-Layer *CreateLayer(const unsigned int width, const unsigned int height)
+Layer CreateLayer()
 {
-    Layer *layer = malloc(sizeof(Layer));
-    if (!layer)
-    {
-        printf("CreateLayer: Failed to allocate memory for layer\n");
-        return NULL;
-    }
-
-    layer->buffer = calloc(width * height, sizeof(Color));
-    if (!layer->buffer)
-    {
-        free(layer);
-        printf("CreateLayer: Failed to allocate memory for layer buffer\n");
-        return NULL;
-    }
-
-    layer->height = height;
-    layer->width = width;
-    return layer;
+    return (Layer){.buffer = {0}};
 }
 
 int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned int y, const char *texturePath)
@@ -32,7 +15,7 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
         return 1;
     }
 
-    if (height > layer->height || width > layer->width)
+    if (height > SCREEN_PIXEL_HEIGHT || width > SCREEN_PIXEL_WIDTH)
     {
         printf("LoadLayerTextureFromFile: Texture image too large\nSize: %dx%d\n", width, height);
         stbi_image_free(textureData);
@@ -49,7 +32,7 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
             unsigned char b = (channels > 2) ? textureData[index + 2] : 0;
             unsigned char a = (channels > 3) ? textureData[index + 3] : 255;
 
-            layer->buffer[(dy + y) * layer->width + (dx + x)] = (Color){r, g, b, a};
+            layer->buffer[(dy + y) * SCREEN_PIXEL_WIDTH + (dx + x)] = (Color){r, g, b, a};
         }
     }
 
@@ -82,15 +65,9 @@ int FillLayer(Layer *layer, Color color)
         return 1;
     }
 
-    if (!layer->buffer)
-    {
-        printf("FillLayer: Invalid layer buffer pointer\n");
-        return 1;
-    }
-
-    for (size_t y = 0; y < layer->height; y++)
-        for (size_t x = 0; x < layer->width; x++)
-            layer->buffer[y * layer->width + x] = color;
+    for (size_t y = 0; y < SCREEN_PIXEL_HEIGHT; y++)
+        for (size_t x = 0; x < SCREEN_PIXEL_WIDTH; x++)
+            layer->buffer[y * SCREEN_PIXEL_WIDTH + x] = color;
 
     return 0;
 }
@@ -109,29 +86,34 @@ int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const
         return 1;
     }
 
-    for (int dy = blockDefinition->textureIndex.y * 24; dy < (blockDefinition->textureIndex.y + 1) * 24; dy++)
+    const int TILE_SIZE = 24;
+    int tileStartX = blockDefinition->textureIndex.x * TILE_SIZE;
+    int tileStartY = blockDefinition->textureIndex.y * TILE_SIZE;
+
+    for (int dy = 0; dy < TILE_SIZE; dy++)
     {
-        for (int dx = blockDefinition->textureIndex.x * 24; dx < (blockDefinition->textureIndex.x + 1) * 24; dx++)
+        for (int dx = 0; dx < TILE_SIZE; dx++)
         {
-            printf("Coord: %d, %d\n", dx, dy);
-            int index = (dy * tileMap.width + dx) * tileMap.channels;
-            printf("Index: %d\n", index);
+            int texX = tileStartX + dx;
+            int texY = tileStartY + dy;
+
+            if (texX >= tileMap.width || texY >= tileMap.height)
+                continue;
+
+            int index = (texY * tileMap.width + texX) * tileMap.channels;
             unsigned char r = tileMap.textureData[index];
             unsigned char g = (tileMap.channels > 1) ? tileMap.textureData[index + 1] : 0;
             unsigned char b = (tileMap.channels > 2) ? tileMap.textureData[index + 2] : 0;
             unsigned char a = (tileMap.channels > 3) ? tileMap.textureData[index + 3] : 255;
 
-            layer->buffer[(dy + y) * layer->width + (dx + x)] = (Color){r, g, b, a};
+            int px = x + dx;
+            int py = y + dy;
+            if (px < 0 || px >= SCREEN_PIXEL_WIDTH || py < 0 || py >= SCREEN_PIXEL_HEIGHT)
+                continue;
+
+            layer->buffer[py * SCREEN_PIXEL_WIDTH + px] = (Color){r, g, b, a};
         }
     }
 
     return 0;
-}
-
-void FreeLayer(Layer *layer)
-{
-    if (!layer)
-        return;
-    free(layer->buffer);
-    free(layer);
 }

@@ -27,7 +27,7 @@ typedef struct
     unsigned char blockCount;
 } BlockRegistry;
 
-BlockRegistry *CreateBlockRegistry();
+BlockRegistry CreateBlockRegistry();
 int RegisterBlock(BlockRegistry *blockRegistry, BlockDefinition blockDefinition);
 int InitializeBlockRegistry(BlockRegistry *blockRegistry);
 

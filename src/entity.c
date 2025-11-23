@@ -1,34 +1,27 @@
 #include "entity.h"
 
-Entity *CreateEntity(const char *name, int x, int y, const char *texture, int width, int height)
+Entity CreateEntity(const char *name, int x, int y, const char *texture, int width, int height)
 {
-    Entity *entity = malloc(sizeof(Entity));
-    if (!entity)
-    {
-        printf("CreateEntity: Failed to allocate memory for entity\n");
-        return NULL;
-    }
-
     if (!name)
     {
         printf("CreateEntity: Invalid name pointer\n");
-        return NULL;
+        exit(1);
     }
 
     if (!texture)
     {
         printf("CreateEntity: Invalid texture pointer\n");
-        return NULL;
+        exit(1);
     }
 
-    entity->name = name;
-    entity->texture = texture;
-    entity->width = width;
-    entity->height = height;
-    entity->x = x;
-    entity->y = y;
-    entity->velocity = (Vector2){0, 0};
-    return entity;
+    return (Entity){
+        .name = name,
+        .texture = texture,
+        .height = height,
+        .width = width,
+        .velocity = {0, 0},
+        .x = x,
+        .y = y};
 }
 
 int EntityOnGround(Entity *entity)
@@ -36,7 +29,7 @@ int EntityOnGround(Entity *entity)
     if (!entity)
     {
         printf("EntityOnGround: Invalid entity pointer\n");
-        return 0;
+        return 1;
     }
 
     return entity->y >= 900.0f;

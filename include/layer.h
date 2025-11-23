@@ -11,15 +11,13 @@
 
 typedef struct
 {
-    unsigned int width, height;
-    Color *buffer;
+    Color buffer[SCREEN_PIXEL_WIDTH * SCREEN_PIXEL_HEIGHT];
 } Layer;
 
-Layer *CreateLayer(const unsigned int width, const unsigned int height);
+Layer CreateLayer();
 int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned int y, const char *texturePath);
 int DrawLayerEntity(Layer *layer, Entity *entity);
 int FillLayer(Layer *layer, Color color);
 int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const unsigned int y, BlockDefinition *blockDefinition);
-void FreeLayer(Layer *layer);
 
 #endif

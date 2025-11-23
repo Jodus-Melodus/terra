@@ -6,13 +6,11 @@
 
 typedef struct
 {
-    unsigned int width, height;
-    unsigned char layerCount;
-    Layer **layers;
+    Layer layers[3];
     TextureMap tileMap;
 } ScreenBuffer;
 
-ScreenBuffer *CreateScreenBuffer(const unsigned int width, const unsigned int height);
+ScreenBuffer CreateScreenBuffer();
 void FreeScreenBuffer(ScreenBuffer *screen);
 
 #endif
