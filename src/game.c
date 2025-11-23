@@ -9,13 +9,9 @@ Game *CreateGame()
         return NULL;
     }
 
-    ScreenBuffer screen = CreateScreenBuffer();
-    BlockRegistry blockregistry = CreateBlockRegistry();
-    Entity player = CreateEntity("Player", 50, 50, "../../textures/test.png", 50, 50);
-
-    game->screen = screen;
-    game->blockRegistry = blockregistry;
-    game->player = player;
+    game->screen = CreateScreenBuffer();
+    game->blockRegistry = CreateBlockRegistry();
+    game->player = CreateEntity("Player", 50, 50, "../../textures/test.png", 50, 50);
 
     InitializeBlockRegistry(&game->blockRegistry);
 
