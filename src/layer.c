@@ -93,6 +93,8 @@ int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const
         return 1;
     }
 
+    // TODO fix tile indexing
+
     const int TILE_SIZE = 24;
     int tileStartX = blockDefinition->textureIndex.x * TILE_SIZE;
     int tileStartY = blockDefinition->textureIndex.y * TILE_SIZE;
@@ -103,21 +105,21 @@ int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const
         {
             int texX = tileStartX + dx;
             int texY = tileStartY + dy;
-
+            
             if (texX >= tileMap.width || texY >= tileMap.height)
-                continue;
-
+            continue;
+            
             int index = (texY * tileMap.width + texX) * tileMap.channels;
             unsigned char r = tileMap.textureData[index];
             unsigned char g = (tileMap.channels > 1) ? tileMap.textureData[index + 1] : 0;
             unsigned char b = (tileMap.channels > 2) ? tileMap.textureData[index + 2] : 0;
             unsigned char a = (tileMap.channels > 3) ? tileMap.textureData[index + 3] : 255;
-
+            
             int px = x + dx;
             int py = y + dy;
             if (px < 0 || px >= SCREEN_PIXEL_WIDTH || py < 0 || py >= SCREEN_PIXEL_HEIGHT)
-                continue;
-
+            continue;
+            
             layer->buffer[py * SCREEN_PIXEL_WIDTH + px] = (Color){r, g, b, a};
         }
     }

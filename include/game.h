@@ -14,7 +14,7 @@ typedef struct
     ScreenBuffer screen;
     BlockRegistry blockRegistry;
     Entity player;
-    BlockID world[SCREEN_BLOCK_WIDTH][SCREEN_BLOCK_HEIGHT];
+    BlockID world[SCREEN_BLOCK_HEIGHT][SCREEN_BLOCK_WIDTH];
     Texture2D textures[3];
 } Game;
 
