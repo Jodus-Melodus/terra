@@ -33,6 +33,7 @@ ScreenBuffer *CreateScreenBuffer(const unsigned int width, const unsigned int he
     screen->layerCount = 3;
     screen->width = width;
     screen->height = height;
+    screen->tileMap = CreateTextureMap("../../textures/tilemap.png");
     return screen;
 }
 
@@ -43,5 +44,6 @@ void FreeScreenBuffer(ScreenBuffer *screen)
     for (size_t i = 0; i < screen->layerCount; i++)
         FreeLayer(screen->layers[i]);
     free(screen->layers);
+    stbi_image_free(screen->tileMap.textureData);
     free(screen);
 }

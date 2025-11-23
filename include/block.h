@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <raylib.h>
 
 typedef enum
 {
@@ -14,7 +15,7 @@ typedef struct
 {
     const char *name;
     int isSolid;
-    int textureIndex;
+    Vector2 textureIndex;
 
     void (*onBreak)(void);
     void (*onPlace)(void);

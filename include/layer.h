@@ -19,7 +19,7 @@ Layer *CreateLayer(const unsigned int width, const unsigned int height);
 int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned int y, const char *texturePath);
 int DrawLayerEntity(Layer *layer, Entity *entity);
 int FillLayer(Layer *layer, Color color);
-int DrawLayerBlock(Layer *layer, const unsigned int x, const unsigned int y, BlockDefinition *blockDefinition);
+int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const unsigned int y, BlockDefinition *blockDefinition);
 void FreeLayer(Layer *layer);
 
 #endif

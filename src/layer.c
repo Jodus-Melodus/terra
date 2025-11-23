@@ -34,7 +34,7 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
 
     if (height > layer->height || width > layer->width)
     {
-        printf("LoadLayerTextureFromFile: Texture image too large\n");
+        printf("LoadLayerTextureFromFile: Texture image too large\nSize: %dx%d\n", width, height);
         stbi_image_free(textureData);
         return 1;
     }
@@ -95,7 +95,7 @@ int FillLayer(Layer *layer, Color color)
     return 0;
 }
 
-int DrawLayerBlock(Layer *layer, const unsigned int x, const unsigned int y, BlockDefinition *blockDefinition)
+int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const unsigned int y, BlockDefinition *blockDefinition)
 {
     if (!layer)
     {
@@ -109,7 +109,21 @@ int DrawLayerBlock(Layer *layer, const unsigned int x, const unsigned int y, Blo
         return 1;
     }
 
-    // TODO interpret x and y to get texture from tilemap
+    for (int dy = blockDefinition->textureIndex.y * 24; dy < (blockDefinition->textureIndex.y + 1) * 24; dy++)
+    {
+        for (int dx = blockDefinition->textureIndex.x * 24; dx < (blockDefinition->textureIndex.x + 1) * 24; dx++)
+        {
+            printf("Coord: %d, %d\n", dx, dy);
+            int index = (dy * tileMap.width + dx) * tileMap.channels;
+            printf("Index: %d\n", index);
+            unsigned char r = tileMap.textureData[index];
+            unsigned char g = (tileMap.channels > 1) ? tileMap.textureData[index + 1] : 0;
+            unsigned char b = (tileMap.channels > 2) ? tileMap.textureData[index + 2] : 0;
+            unsigned char a = (tileMap.channels > 3) ? tileMap.textureData[index + 3] : 255;
+
+            layer->buffer[(dy + y) * layer->width + (dx + x)] = (Color){r, g, b, a};
+        }
+    }
 
     return 0;
 }

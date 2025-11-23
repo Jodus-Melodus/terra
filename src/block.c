@@ -30,18 +30,23 @@ int InitializeBlockRegistry(BlockRegistry *blockRegistry)
     if (!blockRegistry)
     {
         printf("InitializeBlockRegistry: Invalid block registry pointer\n");
-        return NULL;
+        return 1;
     }
+
+    RegisterBlock(blockRegistry, (BlockDefinition){
+                                     .name = "Air",
+                                     .isSolid = 0,
+                                     .textureIndex = (Vector2){2, 0}});
 
     RegisterBlock(blockRegistry, (BlockDefinition){
                                      .name = "Grass",
                                      .isSolid = 1,
-                                     .textureIndex = 0});
+                                     .textureIndex = (Vector2){0,0}});
 
     RegisterBlock(blockRegistry, (BlockDefinition){
                                      .name = "Dirt",
                                      .isSolid = 1,
-                                     .textureIndex = 1});
+                                     .textureIndex = (Vector2){1,0}});
 
     
 

@@ -36,6 +36,15 @@ Game *CreateGame()
 
     InitializeBlockRegistry(game->blockRegistry);
 
+    for (size_t y = 0; y < SCREEN_BLOCK_HEIGHT; y++)
+    {
+        for (size_t x = 0; x < SCREEN_BLOCK_WIDTH; x++)
+        {
+            game->world[x][y] = 0;
+        }
+        
+    }
+
     game->world[0][0] = BI_Grass;
 
     InitWindow(SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT, "Terra");
@@ -99,6 +108,7 @@ int RunGame(Game *game)
         }
 
         FillLayer(game->screen->layers[MidgroundLayer], BLANK);
+        DrawWorld(game);
         UpdateEntity(game->player, deltaTime);
         DrawLayerEntity(game->screen->layers[MidgroundLayer], game->player);
 
@@ -127,7 +137,7 @@ int DrawWorld(Game *game)
         {
             BlockID blockId = game->world[x][y];
             BlockDefinition *blockDefinition = &game->blockRegistry->registry[blockId];
-            DrawLayerBlock(game->screen->layers[MidgroundLayer], x * 24, y * 24, blockDefinition);
+            DrawLayerBlock(game->screen->layers[MidgroundLayer], game->screen->tileMap, x * 24, y * 24, blockDefinition);
         }
     }
 
