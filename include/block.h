@@ -1,14 +1,15 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <raylib.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-enum BlockID
+typedef enum
 {
     BI_Air,
     BI_Dirt,
     BI_Grass
-};
+} BlockID;
 
 typedef struct
 {
@@ -19,5 +20,14 @@ typedef struct
     void (*onBreak)(void);
     void (*onPlace)(void);
 } BlockDefinition;
+
+typedef struct
+{
+    BlockDefinition* registry[256];
+    unsigned char blockCount;
+} BlockRegistry;
+
+BlockRegistry *CreateBlockRegistry();
+int RegisterBlock(BlockRegistry *blockRegistry, BlockDefinition *blockDefinition);
 
 #endif
