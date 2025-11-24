@@ -42,6 +42,15 @@ Game *CreateGame()
 
     game->textures[MidgroundLayer] = LoadTextureFromImage(midgroundImage);
 
+    Image foregroundImage = {
+        .data = game->screen.layers[ForegroundLayer].buffer,
+        .width = SCREEN_PIXEL_WIDTH,
+        .height = SCREEN_PIXEL_HEIGHT,
+        .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
+        .mipmaps = 1};
+
+    game->textures[ForegroundLayer] = LoadTextureFromImage(foregroundImage);
+
     return game;
 }
 
@@ -119,20 +128,23 @@ int RunGame(Game *game)
         mousePosition = GetMousePosition();
 
         FillLayer(&game->screen.layers[MidgroundLayer], BLANK);
+        FillLayer(&game->screen.layers[ForegroundLayer], BLANK);
         DrawWorld(game);
         UpdateEntity(&game->player, deltaTime);
         DrawLayerEntity(&game->screen.layers[MidgroundLayer], &game->player);
         LoadLayerTextureFromFile(
-            &game->screen.layers[MidgroundLayer],
+            &game->screen.layers[ForegroundLayer],
             (int)(mousePosition.x / BLOCK_SIZE) * BLOCK_SIZE,
             (int)(mousePosition.y / BLOCK_SIZE) * BLOCK_SIZE,
             "../../textures/mouse.png");
 
         UpdateTexture(game->textures[MidgroundLayer], game->screen.layers[MidgroundLayer].buffer);
+        UpdateTexture(game->textures[ForegroundLayer], game->screen.layers[ForegroundLayer].buffer);
         BeginDrawing();
         ClearBackground(BLACK);
         DrawTexture(game->textures[BackgroundLayer], 0, 0, WHITE);
         DrawTexture(game->textures[MidgroundLayer], 0, 0, WHITE);
+        DrawTexture(game->textures[ForegroundLayer], 0, 0, WHITE);
         EndDrawing();
     }
 
