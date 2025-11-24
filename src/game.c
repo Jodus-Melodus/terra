@@ -78,6 +78,7 @@ int RunGame(Game *game)
     float deltaTime = 0;
     BlockDefinition blockBeneathMaFeet = game->blockRegistry.registry[BI_Air];
     int groundLevel = GROUND_LEVEL;
+    Vector2 mousePosition;
 
     while (!WindowShouldClose())
     {
@@ -115,10 +116,17 @@ int RunGame(Game *game)
         else
             blockBeneathMaFeet = game->blockRegistry.registry[game->world[y][x]];
 
+        mousePosition = GetMousePosition();
+
         FillLayer(&game->screen.layers[MidgroundLayer], BLANK);
         DrawWorld(game);
         UpdateEntity(&game->player, deltaTime);
         DrawLayerEntity(&game->screen.layers[MidgroundLayer], &game->player);
+        LoadLayerTextureFromFile(
+            &game->screen.layers[MidgroundLayer],
+            (int)(mousePosition.x / BLOCK_SIZE) * BLOCK_SIZE,
+            (int)(mousePosition.y / BLOCK_SIZE) * BLOCK_SIZE,
+            "../../textures/mouse.png");
 
         UpdateTexture(game->textures[MidgroundLayer], game->screen.layers[MidgroundLayer].buffer);
         BeginDrawing();
