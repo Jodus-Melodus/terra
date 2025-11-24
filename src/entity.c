@@ -32,7 +32,7 @@ int EntityOnGround(Entity *entity)
         return 1;
     }
 
-    return entity->y >= 900.0f;
+    return entity->y >= GROUND_LEVEL;
 }
 
 void UpdateEntity(Entity *entity, float deltaTime)

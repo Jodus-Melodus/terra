@@ -19,8 +19,11 @@ Game *CreateGame()
         for (size_t x = 0; x < SCREEN_BLOCK_WIDTH; x++)
             game->world[y][x] = BI_Air;
 
-    game->world[0][0] = BI_Grass;
-
+    for (int i = 0; i < SCREEN_BLOCK_HEIGHT; i++)
+    {
+        game->world[i][i] = BI_Grass;
+    }
+    
     InitWindow(SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT, "Terra");
 
     Image backgroundImage = {
@@ -74,9 +77,9 @@ int RunGame(Game *game)
         if (IsKeyDown(KEY_SPACE) && EntityOnGround(&game->player))
             game->player.velocity.y = -500;
 
-        if (game->player.y >= 900.0f)
+        if (game->player.y >= GROUND_LEVEL)
         {
-            game->player.y = 900.0f;
+            game->player.y = GROUND_LEVEL;
             if (game->player.velocity.y > 0)
                 game->player.velocity.y = 0;
         }
@@ -111,7 +114,7 @@ int DrawWorld(Game *game)
         {
             BlockID blockId = game->world[y][x];
             BlockDefinition *blockDefinition = &game->blockRegistry.registry[blockId];
-            DrawLayerBlock(&game->screen.layers[MidgroundLayer], game->screen.tileMap, x * 24, y * 24, blockDefinition);
+            DrawLayerBlock(&game->screen.layers[MidgroundLayer], game->screen.tileMap, x * BLOCK_SIZE, y * BLOCK_SIZE, blockDefinition);
         }
     }
 

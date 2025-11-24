@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "types.h"
+
 typedef struct
 {
     const char *name;

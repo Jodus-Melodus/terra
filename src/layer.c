@@ -39,7 +39,10 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
             unsigned char b = (channels > 2) ? textureData[index + 2] : 0;
             unsigned char a = (channels > 3) ? textureData[index + 3] : 255;
 
-            layer->buffer[(dy + y) * SCREEN_PIXEL_WIDTH + (dx + x)] = (Color){r, g, b, a};
+            int i = (dy + y) * SCREEN_PIXEL_WIDTH + (dx + x);
+
+            if (i < SCREEN_PIXEL_WIDTH * SCREEN_PIXEL_HEIGHT)
+                layer->buffer[i] = (Color){r, g, b, a};
         }
     }
 
@@ -61,7 +64,7 @@ int DrawLayerEntity(Layer *layer, Entity *entity)
         return 1;
     }
 
-    return LoadLayerTextureFromFile(layer, entity->x - entity->width / 2, entity->y - entity->height / 2, entity->texture);
+    return LoadLayerTextureFromFile(layer, entity->x - entity->width / 2, entity->y - entity->height, entity->texture);
 }
 
 int FillLayer(Layer *layer, Color color)
@@ -93,13 +96,12 @@ int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const
         return 1;
     }
 
-    const int TILE_SIZE = 48;
-    int tileStartX = blockDefinition->textureIndex.x * TILE_SIZE;
-    int tileStartY = blockDefinition->textureIndex.y * TILE_SIZE;
+    int tileStartX = blockDefinition->textureIndex.x * BLOCK_SIZE;
+    int tileStartY = blockDefinition->textureIndex.y * BLOCK_SIZE;
 
-    for (int dy = 0; dy < TILE_SIZE; dy++)
+    for (int dy = 0; dy < BLOCK_SIZE; dy++)
     {
-        for (int dx = 0; dx < TILE_SIZE; dx++)
+        for (int dx = 0; dx < BLOCK_SIZE; dx++)
         {
             int texX = tileStartX + dx;
             int texY = tileStartY + dy;
