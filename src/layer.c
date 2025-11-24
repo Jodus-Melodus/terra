@@ -93,19 +93,9 @@ int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const
         return 1;
     }
 
-    // TODO fix tile indexing
-
-    const int TILE_SIZE = 24;
+    const int TILE_SIZE = 48;
     int tileStartX = blockDefinition->textureIndex.x * TILE_SIZE;
     int tileStartY = blockDefinition->textureIndex.y * TILE_SIZE;
-
-    // int index = 0;
-    // unsigned char r = tileMap.textureData[index];
-    // unsigned char g = (tileMap.channels > 1) ? tileMap.textureData[index + 1] : 0;
-    // unsigned char b = (tileMap.channels > 2) ? tileMap.textureData[index + 2] : 0;
-    // unsigned char a = (tileMap.channels > 3) ? tileMap.textureData[index + 3] : 255;
-
-    // printf("%d %d %d %d\n", r, g, b, a);
 
     for (int dy = 0; dy < TILE_SIZE; dy++)
     {
