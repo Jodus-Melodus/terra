@@ -64,7 +64,7 @@ int DrawLayerEntity(Layer *layer, Entity *entity)
         return 1;
     }
 
-    return LoadLayerTextureFromFile(layer, entity->x - BLOCK_SIZE / 2, entity->y - BLOCK_SIZE, entity->texture);
+    return LoadLayerTextureFromFile(layer, entity->x - BLOCK_SIZE / 2, entity->y - BLOCK_SIZE / 2, entity->texture);
 }
 
 int FillLayer(Layer *layer, Color color)

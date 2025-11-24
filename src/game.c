@@ -84,71 +84,64 @@ int RunGame(Game *game)
     }
 
     SetTargetFPS(60);
-    float deltaTime = 0;
-    BlockDefinition blockBeneathMaFeet = game->blockRegistry.registry[BI_Air];
-    int groundLevel = GROUND_LEVEL;
-    Vector2 mousePosition;
+    surroundingBlocks[Down] = game->blockRegistry.registry[BI_Air];
 
     while (!WindowShouldClose())
     {
         deltaTime = GetFrameTime();
+        mousePosition = GetMousePosition();
+        HandlePlayerMovement(game);
+        RedrawGame(game);
+    }
 
-        if (IsKeyDown(KEY_A))
-            game->player.velocity.x = -200;
-        else if (IsKeyDown(KEY_D))
-            game->player.velocity.x = 200;
-        else
-            game->player.velocity.x = 0;
+    return 0;
+}
 
-        game->player.velocity.y += 980.0f * deltaTime;
+void HandlePlayerMovement(Game *game)
+{
+    int x = game->player.x / BLOCK_SIZE;
+    int y = game->player.y / BLOCK_SIZE;
 
-        if (IsKeyDown(KEY_SPACE) && blockBeneathMaFeet.isSolid)
-            game->player.velocity.y = -250;
+    if (x < 0)
+        x = 0;
+    if (x >= SCREEN_BLOCK_WIDTH)
+        x = SCREEN_BLOCK_WIDTH - 1;
+    if (y < 0)
+        y = 0;
+    if (y >= SCREEN_BLOCK_HEIGHT)
+        y = SCREEN_BLOCK_HEIGHT - 1;
 
-        if (game->player.y >= groundLevel)
+    surroundingBlocks[Up] = (y == 0) ? game->blockRegistry.registry[BI_Air] : game->blockRegistry.registry[game->world[y - 1][x]];
+    surroundingBlocks[Down] = (y == SCREEN_BLOCK_HEIGHT - 1) ? game->blockRegistry.registry[BI_Air] : game->blockRegistry.registry[game->world[y + 1][x]];
+    surroundingBlocks[Left] = (x == 0) ? game->blockRegistry.registry[BI_Air] : game->blockRegistry.registry[game->world[y][x - 1]];
+    surroundingBlocks[Right] = (x == SCREEN_BLOCK_WIDTH - 1) ? game->blockRegistry.registry[BI_Air] : game->blockRegistry.registry[game->world[y][x + 1]];
+
+    if (IsKeyDown(KEY_A) && !surroundingBlocks[Left].isSolid)
+        game->player.velocity.x = -200;
+    else if (IsKeyDown(KEY_D) && !surroundingBlocks[Right].isSolid)
+        game->player.velocity.x = 200;
+    else
+        game->player.velocity.x = 0;
+
+    if (IsKeyDown(KEY_SPACE) && surroundingBlocks[Down].isSolid && !surroundingBlocks[Up].isSolid)
+        game->player.velocity.y = -250;
+
+    if (surroundingBlocks[Down].isSolid)
+    {
+        groundLevel = (y + 1) * BLOCK_SIZE - BLOCK_SIZE / 2;
+        if (game->player.y > groundLevel)
         {
             game->player.y = groundLevel;
             if (game->player.velocity.y > 0)
                 game->player.velocity.y = 0;
         }
-
-        int y = (game->player.y / BLOCK_SIZE);
-        int x = (game->player.x / BLOCK_SIZE);
-
-        if (blockBeneathMaFeet.isSolid)
-            groundLevel = y * BLOCK_SIZE;
-        else
-            groundLevel = SCREEN_PIXEL_HEIGHT;
-
-        if (y == SCREEN_BLOCK_HEIGHT)
-            blockBeneathMaFeet = game->blockRegistry.registry[BI_Air];
-        else
-            blockBeneathMaFeet = game->blockRegistry.registry[game->world[y][x]];
-
-        mousePosition = GetMousePosition();
-
-        FillLayer(&game->screen.layers[MidgroundLayer], BLANK);
-        FillLayer(&game->screen.layers[ForegroundLayer], BLANK);
-        DrawWorld(game);
-        UpdateEntity(&game->player, deltaTime);
-        DrawLayerEntity(&game->screen.layers[MidgroundLayer], &game->player);
-        LoadLayerTextureFromFile(
-            &game->screen.layers[ForegroundLayer],
-            (int)(mousePosition.x / BLOCK_SIZE) * BLOCK_SIZE,
-            (int)(mousePosition.y / BLOCK_SIZE) * BLOCK_SIZE,
-            "../../textures/mouse.png");
-
-        UpdateTexture(game->textures[MidgroundLayer], game->screen.layers[MidgroundLayer].buffer);
-        UpdateTexture(game->textures[ForegroundLayer], game->screen.layers[ForegroundLayer].buffer);
-        BeginDrawing();
-        ClearBackground(BLACK);
-        DrawTexture(game->textures[BackgroundLayer], 0, 0, WHITE);
-        DrawTexture(game->textures[MidgroundLayer], 0, 0, WHITE);
-        DrawTexture(game->textures[ForegroundLayer], 0, 0, WHITE);
-        EndDrawing();
     }
-
-    return 0;
+    else
+    {
+        game->player.velocity.y += 1000.0f * deltaTime;
+        groundLevel = SCREEN_PIXEL_HEIGHT - BLOCK_SIZE / 2;
+    }
+    game->player.y += game->player.velocity.y * deltaTime;
 }
 
 int DrawWorld(Game *game)
@@ -170,6 +163,29 @@ int DrawWorld(Game *game)
     }
 
     return 0;
+}
+
+void RedrawGame(Game *game)
+{
+    FillLayer(&game->screen.layers[MidgroundLayer], BLANK);
+    FillLayer(&game->screen.layers[ForegroundLayer], BLANK);
+    DrawWorld(game);
+    UpdateEntity(&game->player, deltaTime);
+    DrawLayerEntity(&game->screen.layers[MidgroundLayer], &game->player);
+    LoadLayerTextureFromFile(
+        &game->screen.layers[ForegroundLayer],
+        (int)(mousePosition.x / BLOCK_SIZE) * BLOCK_SIZE,
+        (int)(mousePosition.y / BLOCK_SIZE) * BLOCK_SIZE,
+        "../../textures/mouse.png");
+
+    UpdateTexture(game->textures[MidgroundLayer], game->screen.layers[MidgroundLayer].buffer);
+    UpdateTexture(game->textures[ForegroundLayer], game->screen.layers[ForegroundLayer].buffer);
+    BeginDrawing();
+    ClearBackground(BLACK);
+    DrawTexture(game->textures[BackgroundLayer], 0, 0, WHITE);
+    DrawTexture(game->textures[MidgroundLayer], 0, 0, WHITE);
+    DrawTexture(game->textures[ForegroundLayer], 0, 0, WHITE);
+    EndDrawing();
 }
 
 void FinishGame(Game *game)

@@ -4,7 +4,7 @@
 int main()
 {
     Game *game = CreateGame();
-    GenerateWorld(game, 12345);
+    GenerateWorld(game, 9999999999999999);
     RunGame(game);
     FinishGame(game);
     return 0;

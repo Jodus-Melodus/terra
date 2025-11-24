@@ -13,6 +13,14 @@
 
 typedef enum
 {
+    Up,
+    Down,
+    Left,
+    Right
+} Direction;
+
+typedef enum
+{
     BackgroundLayer,
     ForegroundLayer,
     MidgroundLayer

@@ -11,6 +11,11 @@
 #include "entity.h"
 #include "utils.h"
 
+static float deltaTime = 0;
+static int groundLevel = GROUND_LEVEL;
+static Vector2 mousePosition;
+static BlockDefinition surroundingBlocks[4];
+
 typedef struct
 {
     ScreenBuffer screen;
@@ -23,7 +28,9 @@ typedef struct
 Game *CreateGame();
 int GenerateWorld(Game *game, unsigned int seed);
 int RunGame(Game *game);
+void HandlePlayerMovement(Game *game);
 int DrawWorld(Game *game);
+void RedrawGame(Game *game);
 void FinishGame(Game *game);
 
 #endif
