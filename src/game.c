@@ -11,7 +11,7 @@ Game *CreateGame()
 
     game->screen = CreateScreenBuffer();
     game->blockRegistry = CreateBlockRegistry();
-    game->player = CreateEntity("Player", 50, 50, "../../textures/test.png", 50, 50);
+    game->player = CreateEntity("Player", 50, 50, "../../textures/test.png");
 
     InitializeBlockRegistry(&game->blockRegistry);
 
@@ -23,7 +23,7 @@ Game *CreateGame()
     {
         game->world[i][i] = BI_Grass;
     }
-    
+
     InitWindow(SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT, "Terra");
 
     Image backgroundImage = {
@@ -60,6 +60,8 @@ int RunGame(Game *game)
 
     SetTargetFPS(60);
     float deltaTime = 0;
+    BlockDefinition blockBeneathMaFeet = game->blockRegistry.registry[BI_Air];
+    int groundLevel = GROUND_LEVEL;
 
     while (!WindowShouldClose())
     {
@@ -74,15 +76,28 @@ int RunGame(Game *game)
 
         game->player.velocity.y += 980.0f * deltaTime;
 
-        if (IsKeyDown(KEY_SPACE) && EntityOnGround(&game->player))
-            game->player.velocity.y = -500;
+        if (IsKeyDown(KEY_SPACE) && blockBeneathMaFeet.isSolid)
+            game->player.velocity.y = -250;
 
-        if (game->player.y >= GROUND_LEVEL)
+        if (game->player.y >= groundLevel)
         {
-            game->player.y = GROUND_LEVEL;
+            game->player.y = groundLevel;
             if (game->player.velocity.y > 0)
                 game->player.velocity.y = 0;
         }
+
+        int y = (game->player.y / BLOCK_SIZE);
+        int x = (game->player.x / BLOCK_SIZE);
+
+        if (blockBeneathMaFeet.isSolid)
+            groundLevel = y * BLOCK_SIZE;
+        else
+            groundLevel = SCREEN_PIXEL_HEIGHT;
+
+        if (y == SCREEN_BLOCK_HEIGHT)
+            blockBeneathMaFeet = game->blockRegistry.registry[BI_Air];
+        else
+            blockBeneathMaFeet = game->blockRegistry.registry[game->world[y][x]];
 
         FillLayer(&game->screen.layers[MidgroundLayer], BLANK);
         DrawWorld(game);

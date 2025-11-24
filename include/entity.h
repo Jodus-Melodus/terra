@@ -12,11 +12,11 @@ typedef struct
 {
     const char *name;
     const char *texture;
-    int width, height, x, y;
+    int x, y;
     Vector2 velocity;
 } Entity;
 
-Entity CreateEntity(const char *name, int x, int y, const char *texture, int width, int height);
+Entity CreateEntity(const char *name, int x, int y, const char *texture);
 int EntityOnGround(Entity *entity);
 void UpdateEntity(Entity *entity, float deltaTime);
 

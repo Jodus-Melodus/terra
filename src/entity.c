@@ -1,6 +1,6 @@
 #include "entity.h"
 
-Entity CreateEntity(const char *name, int x, int y, const char *texture, int width, int height)
+Entity CreateEntity(const char *name, int x, int y, const char *texture)
 {
     if (!name)
     {
@@ -17,8 +17,6 @@ Entity CreateEntity(const char *name, int x, int y, const char *texture, int wid
     return (Entity){
         .name = name,
         .texture = texture,
-        .height = height,
-        .width = width,
         .velocity = {0, 0},
         .x = x,
         .y = y};

@@ -41,7 +41,7 @@ int LoadLayerTextureFromFile(Layer *layer, const unsigned int x, const unsigned 
 
             int i = (dy + y) * SCREEN_PIXEL_WIDTH + (dx + x);
 
-            if (i < SCREEN_PIXEL_WIDTH * SCREEN_PIXEL_HEIGHT)
+            if (i > 0 && i < SCREEN_PIXEL_WIDTH * SCREEN_PIXEL_HEIGHT)
                 layer->buffer[i] = (Color){r, g, b, a};
         }
     }
@@ -64,7 +64,7 @@ int DrawLayerEntity(Layer *layer, Entity *entity)
         return 1;
     }
 
-    return LoadLayerTextureFromFile(layer, entity->x - entity->width / 2, entity->y - entity->height, entity->texture);
+    return LoadLayerTextureFromFile(layer, entity->x - BLOCK_SIZE / 2, entity->y - BLOCK_SIZE, entity->texture);
 }
 
 int FillLayer(Layer *layer, Color color)
