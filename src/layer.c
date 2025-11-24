@@ -99,27 +99,35 @@ int DrawLayerBlock(Layer *layer, TextureMap tileMap, const unsigned int x, const
     int tileStartX = blockDefinition->textureIndex.x * TILE_SIZE;
     int tileStartY = blockDefinition->textureIndex.y * TILE_SIZE;
 
+    // int index = 0;
+    // unsigned char r = tileMap.textureData[index];
+    // unsigned char g = (tileMap.channels > 1) ? tileMap.textureData[index + 1] : 0;
+    // unsigned char b = (tileMap.channels > 2) ? tileMap.textureData[index + 2] : 0;
+    // unsigned char a = (tileMap.channels > 3) ? tileMap.textureData[index + 3] : 255;
+
+    // printf("%d %d %d %d\n", r, g, b, a);
+
     for (int dy = 0; dy < TILE_SIZE; dy++)
     {
         for (int dx = 0; dx < TILE_SIZE; dx++)
         {
             int texX = tileStartX + dx;
             int texY = tileStartY + dy;
-            
+
             if (texX >= tileMap.width || texY >= tileMap.height)
-            continue;
-            
+                continue;
+
             int index = (texY * tileMap.width + texX) * tileMap.channels;
             unsigned char r = tileMap.textureData[index];
             unsigned char g = (tileMap.channels > 1) ? tileMap.textureData[index + 1] : 0;
             unsigned char b = (tileMap.channels > 2) ? tileMap.textureData[index + 2] : 0;
             unsigned char a = (tileMap.channels > 3) ? tileMap.textureData[index + 3] : 255;
-            
+
             int px = x + dx;
             int py = y + dy;
             if (px < 0 || px >= SCREEN_PIXEL_WIDTH || py < 0 || py >= SCREEN_PIXEL_HEIGHT)
-            continue;
-            
+                continue;
+
             layer->buffer[py * SCREEN_PIXEL_WIDTH + px] = (Color){r, g, b, a};
         }
     }
