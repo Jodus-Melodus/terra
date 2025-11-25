@@ -12,10 +12,8 @@ struct Entity
 {
     const char *name;
     const char *texture;
-    int x, y;
 };
 
-struct Entity CreateEntity(const char *name, int x, int y, const char *texture);
-int EntityOnGround(struct Entity *entity);
+struct Entity CreateEntity(const char *name, const char *texture);
 
 #endif

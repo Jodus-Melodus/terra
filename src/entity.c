@@ -1,6 +1,6 @@
 #include "entity.h"
 
-struct Entity CreateEntity(const char *name, int x, int y, const char *texture)
+struct Entity CreateEntity(const char *name, const char *texture)
 {
     if (!name)
     {
@@ -17,17 +17,5 @@ struct Entity CreateEntity(const char *name, int x, int y, const char *texture)
     return (struct Entity){
         .name = name,
         .texture = texture,
-        .x = x,
-        .y = y};
-}
-
-int EntityOnGround(struct Entity *entity)
-{
-    if (!entity)
-    {
-        printf("EntityOnGround: Invalid entity pointer\n");
-        return 1;
-    }
-
-    return entity->y >= GROUND_LEVEL;
+    };
 }
