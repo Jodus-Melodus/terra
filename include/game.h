@@ -21,12 +21,12 @@ struct Game
     struct ScreenBuffer screen;
     struct BlockRegistry blockRegistry;
     struct Entity player;
-    enum BlockID world[SCREEN_BLOCK_HEIGHT][SCREEN_BLOCK_WIDTH];
     Texture2D textures[3];
+    Vector2 camera;
 };
 
-struct Game *CreateGame();
-int GenerateWorld(struct Game *game, unsigned int seed);
+struct Game *CreateGame(unsigned int seed);
+enum BlockID GetWorldBlock(struct Game *game, int x);
 int RunGame(struct Game *game);
 void HandlePlayerMovement(struct Game *game);
 int DrawWorld(struct Game *game);

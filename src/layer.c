@@ -64,7 +64,7 @@ int DrawLayerEntity(struct Layer *layer, struct Entity *entity)
         return 1;
     }
 
-    return LoadLayerTextureFromFile(layer, entity->x - BLOCK_SIZE / 2, entity->y - BLOCK_SIZE / 2, entity->texture);
+    return LoadLayerTextureFromFile(layer, SCREEN_PIXEL_WIDTH / 2, SCREEN_PIXEL_HEIGHT / 2, entity->texture);
 }
 
 int FillLayer(struct Layer *layer, Color color)

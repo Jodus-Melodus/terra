@@ -13,11 +13,9 @@ struct Entity
     const char *name;
     const char *texture;
     int x, y;
-    Vector2 velocity;
 };
 
 struct Entity CreateEntity(const char *name, int x, int y, const char *texture);
 int EntityOnGround(struct Entity *entity);
-void UpdateEntity(struct Entity *entity, float deltaTime);
 
 #endif

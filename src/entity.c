@@ -17,7 +17,6 @@ struct Entity CreateEntity(const char *name, int x, int y, const char *texture)
     return (struct Entity){
         .name = name,
         .texture = texture,
-        .velocity = {0, 0},
         .x = x,
         .y = y};
 }
@@ -31,10 +30,4 @@ int EntityOnGround(struct Entity *entity)
     }
 
     return entity->y >= GROUND_LEVEL;
-}
-
-void UpdateEntity(struct Entity *entity, float deltaTime)
-{
-    entity->x += round(entity->velocity.x * deltaTime);
-    entity->y += round(entity->velocity.y * deltaTime);
 }

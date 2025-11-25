@@ -11,7 +11,7 @@ void noiseSeed(unsigned int seed)
 
 float sigmoid(float x)
 {
-    return 1.0 / (1.0 + expf(-x)) - 0.5;
+    return 1.0 / (1.0 + expf(-x));
 }
 
 float noiseGet(float x)
